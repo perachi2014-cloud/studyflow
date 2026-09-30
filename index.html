@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StudyFlow</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- ================= AUTH SCREEN ================= -->
+<div id="authScreen" class="auth-screen">
+
+  <div class="auth-card">
+    <div class="brand">
+      <div class="brand-icon">S</div>
+      <div>
+        <h1>StudyFlow</h1>
+        <p>Your personal learning system</p>
+      </div>
+    </div>
+
+    <!-- LOGIN -->
+    <div id="loginBox">
+      <h2>Welcome back</h2>
+      <p class="muted">Sign in to continue to your workspace.</p>
+
+      <input id="loginEmail" type="text" placeholder="Email or username">
+      <input id="loginPassword" type="password" placeholder="Password">
+
+      <button class="primary-btn" onclick="login()">Sign In</button>
+
+      <p class="switch-text">
+        New to StudyFlow?
+        <button class="text-btn" onclick="showSignup()">Create account</button>
+      </p>
+    </div>
+
+    <!-- SIGNUP -->
+    <div id="signupBox" class="hidden">
+      <h2>Create your workspace</h2>
+      <p class="muted">Your account starts completely empty.</p>
+
+      <input id="signupName" type="text" placeholder="Your full name">
+      <input id="signupEmail" type="text" placeholder="Email or username">
+      <input id="signupPassword" type="password" placeholder="Create password">
+
+      <button class="primary-btn" onclick="signup()">Create Account</button>
+
+      <p class="switch-text">
+        Already have an account?
+        <button class="text-btn" onclick="showLogin()">Sign in</button>
+      </p>
+    </div>
+
+    <p id="authMessage" class="auth-message"></p>
+  </div>
+
+</div>
+
+
+<!-- ================= MAIN APP ================= -->
+<div id="app" class="app hidden">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+
+    <div class="sidebar-brand">
+      <div class="brand-icon">S</div>
+      <div>
+        <strong>StudyFlow</strong>
+        <span>Student Workspace</span>
+      </div>
+    </div>
+
+    <nav>
+
+      <button class="nav-btn active" onclick="showPage('dashboard', this)">
+        <span>⌂</span> Dashboard
+      </button>
+
+      <button class="nav-btn" onclick="showPage('subjects', this)">
+        <span>▣</span> My Subjects
+      </button>
+
+      <button class="nav-btn" onclick="showPage('learn', this)">
+        <span>◈</span> Learn
+      </button>
+
+      <button class="nav-btn" onclick="showPage('route', this)">
+        <span>➜</span> Study Route
+      </button>
+
+      <button class="nav-btn" onclick="showPage('focus', this)">
+        <span>◷</span> Focus Center
+      </button>
+
+      <button class="nav-btn" onclick="showPage('revision', this)">
+        <span>↻</span> Revision Radar
+      </button>
+
+      <button class="nav-btn" onclick="showPage('stuck', this)">
+        <span>?</span> I'm Stuck
+      </button>
+
+      <button class="nav-btn" onclick="showPage('books', this)">
+        <span>▤</span> E-Book Library
+      </button>
+
+      <button class="nav-btn" onclick="showPage('quiz', this)">
+        <span>✓</span> Quick Quiz
+      </button>
+
+      <button class="nav-btn" onclick="showPage('universe', this)">
+        <span>◎</span> Knowledge Universe
+      </button>
+
+      <button class="nav-btn" onclick="showPage('customize', this)">
+        <span>⚙</span> Customize
+      </button>
+
+    </nav>
+
+    <div class="sidebar-bottom">
+
+      <div class="user-mini">
+        <div id="userAvatar">R</div>
+        <div>
+          <strong id="sideUserName">Student</strong>
+          <span>My Account</span>
+        </div>
+      </div>
+
+      <button class="logout-btn" onclick="logout()">Log Out</button>
+
+    </div>
+
+  </aside>
+
+
+  <!-- CONTENT -->
+  <main class="main">
+
+    <header class="topbar">
+      <button class="mobile-menu" onclick="toggleSidebar()">☰</button>
+
+      <div>
+        <div class="page-label">STUDYFLOW</div>
+        <h2 id="pageTitle">Dashboard</h2>
+      </div>
+
+      <div class="top-user">
+        <span id="topUserName">Student</span>
+        <div id="topAvatar">S</div>
+      </div>
+    </header>
+
+
+    <!-- ================= DASHBOARD ================= -->
+    <section id="dashboard" class="page active-page">
+
+      <div class="welcome-card">
+        <div>
+          <span class="small-label">YOUR WORKSPACE</span>
+          <h1>Welcome, <span id="welcomeName">Student</span>.</h1>
+          <p>Your StudyFlow workspace is ready. Build it your way.</p>
+        </div>
+
+        <div class="welcome-orb">S</div>
+      </div>
+
+
+      <div class="stats-grid">
+
+        <div class="stat-card">
+          <span>Focus Time</span>
+          <strong id="focusStat">0 min</strong>
+          <small>Your recorded study time</small>
+        </div>
+
+        <div class="stat-card">
+          <span>Subjects</span>
+          <strong id="subjectStat">0</strong>
+          <small>Subjects in your workspace</small>
+        </div>
+
+        <div class="stat-card">
+          <span>Lessons</span>
+          <strong id="lessonStat">0</strong>
+          <small>Lessons you've added</small>
+        </div>
+
+        <div class="stat-card">
+          <span>Study Streak</span>
+          <strong id="streakStat">0 days</strong>
+          <small>Keep building your routine</small>
+        </div>
+
+      </div>
+
+
+      <div class="section-heading">
+        <div>
+          <h2>Your Learning Space</h2>
+          <p>Everything here is created by you.</p>
+        </div>
+      </div>
+
+      <div id="dashboardEmpty" class="empty-state">
+        <div class="empty-icon">＋</div>
+        <h3>Your workspace is empty</h3>
+        <p>
+          Add your first subject and lesson to start building
+          your personalized study system.
+        </p>
+
+        <button class="primary-btn small" onclick="showPage('subjects')">
+          Add Your First Subject
+        </button>
+      </div>
+
+      <div id="dashboardContent" class="dashboard-content hidden">
+
+        <div class="content-grid">
+
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h3>My Subjects</h3>
+                <p>Your current subjects</p>
+              </div>
+
+              <button class="small-btn" onclick="showPage('subjects')">
+                Manage
+              </button>
+            </div>
+
+            <div id="dashboardSubjects"></div>
+          </div>
+
+
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h3>Recent Lessons</h3>
+                <p>Your latest learning items</p>
+              </div>
+            </div>
+
+            <div id="dashboardLessons"></div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ================= SUBJECTS ================= -->
+    <section id="subjects" class="page">
+
+      <div class="page-intro">
+        <div>
+          <span class="small-label">YOUR CONTENT</span>
+          <h1>My Subjects</h1>
+          <p>Create the subjects you actually study.</p>
+        </div>
+
+        <button class="primary-btn" onclick="openSubjectModal()">
+          + Add Subject
+        </button>
+      </div>
+
+      <div id="subjectsList" class="subject-grid"></div>
+
+      <div id="subjectsEmpty" class="empty-state">
+        <div class="empty-icon">▣</div>
+        <h3>No subjects yet</h3>
+        <p>Add your first subject. Nothing is pre-filled.</p>
+        <button class="primary-btn small" onclick="openSubjectModal()">
+          + Add Subject
+        </button>
+      </div>
+
+    </section>
+
+
+    <!-- ================= LEARN ================= -->
+    <section id="learn" class="page">
+
+      <div class="page-intro">
+        <div>
+          <span class="small-label">LEARNING</span>
+          <h1>Learn</h1>
+          <p>Work with the lessons you've created.</p>
+        </div>
+      </div>
+
+      <div class="learn-layout">
+
+        <div class="panel">
+          <h3>Select a lesson</h3>
+          <p class="muted">Choose something from your workspace.</p>
+
+          <div id="learnLessons"></div>
+
+          <div id="learnEmpty" class="empty-mini">
+            No lessons yet. Add a lesson under My Subjects.
+          </div>
+        </div>
+
+        <div class="panel lesson-view">
+
+          <div id="lessonPlaceholder">
+            <div class="large-placeholder">◈</div>
+            <h2>Select a lesson</h2>
+            <p>Your lesson content will appear here.</p>
+          </div>
+
+          <div id="lessonDetails" class="hidden">
+            <span id="detailSubject" class="tag"></span>
+            <h2 id="detailLesson"></h2>
+
+            <textarea
+              id="lessonNotes"
+              placeholder="Write your notes here..."
+              oninput="saveCurrentNotes()"
+            ></textarea>
+
+            <button class="primary-btn small" onclick="markLessonDone()">
+              Mark Lesson Complete
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ================= ROUTE ================= -->
+    <section id="route" class="page">
+
+      <div class="page-intro">
+        <div>
+          <span class="small-label">PLANNING</span>
+          <h1>Study Route</h1>
+          <p>Create your own learning sequence.</p>
+        </div>
+
+        <button class="primary-btn" onclick="createRoute()">
+          Build Route
+        </button>
+      </div>
+
+      <div id="routeList" class="route-list"></div>
+
+      <div id="routeEmpty" class="empty-state">
+        <div class="empty-icon">➜</div>
+        <h3>No study route yet</h3>
+        <p>Add lessons first, then build a route from them.</p>
+      </div>
+
+    </section>
+
+
+    <!-- ================= FOCUS ================= -->
+    <section id="focus" class="page">
+
+      <div class="page-intro">
+        <div>
+          <span class="small-label">FOCUS</span>
+          <h1>Focus Center</h1>
+          <p>Study without distractions.</p>
+        </div>
+      </div>
+
+      <div class="focus-container">
+
+        <div class="timer-card">
+
+          <span class="timer-label">FOCUS SESSION</span>
+
+          <div id="timer">25:00</div>
+
+          <div class="timer-progress">
+            <div id="timerProgress"></div>
+          </div>
+
+          <div class="timer-buttons">
+            <button onclick="setTimer(25)">25 min</button>
+            <button onclick="setTimer(45)">45 min</button>
+            <button onclick="setTimer(60)">60 min</button>
+          </div>
+
+          <div class="timer-controls">
+            <button class="primary-btn" onclick="startTimer()">Start</button>
+            <button class="secondary-btn" onclick="pauseTimer()">Pause</button>
+            <button class="secondary-btn" onclick="resetTimer()">Reset</button>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ================= REVISION ================= -->
+    <section id="revision" class="page">
+
+      <div class="page-intro">
+        <div>
+          <span class="small-label">RECALL</span>
+          <h1>Revision Radar</h1>
+          <p>Review lessons you've created.</p>
+        </div>
+      </div>
+
+      <div id="revisionList"></div>
+
+      <div id="revisionEmpty" class="empty-state">
+        <div class="empty-icon">↻</div>
+        <h3>Nothing to revise yet</h3>
+        <p>Your completed lessons will appear here.</p>
+      </div>
+
+    </section>
+
+
+    <!-- ================= STUCK ================= -->
+    <section id="stuck" class="page">
+
+      <div class="page-intro">
+        <div>
+          <span class="small-label">SUPPORT</span>
+          <h1>I'm Stuck</h1>
+          <p>Identify what is blocking your learning.</p>
+        </div>
+      </div>
+
+      <div class="stuck-grid">
+
+        <button onclick="stuckResponse('concept')">
+          <strong>I don't understand the concept</strong>
+          <span>Break the lesson into smaller ideas.</span>
+        </button>
+
+        <button onclick="stuckResponse('memory')">
+          <strong>I can't remember it</strong>
+          <span>Use active recall and spaced revision.</span>
+        </button>
+
+        <button onclick="stuckResponse('question')">
+          <strong>I can't solve the question</strong>
+          <span>Identify the missing step or prerequisite.</span>
+        </button>
+
+        <button onclick="stuckResponse('start')">
+          <strong>I don't know where to start</strong>
+          <span>Build a simple study route.</span>
+        </button>
+
+      </div>
+
+      <div id="stuckAnswer" class="stuck-answer hidden"></div>
+
+    </section>
+
+
+    <!-- ================= BOOKS ================= -->
+    <section id="books" class="page">
+
+      <div class="page-intro">
+        <div>
+          <span class="small-label">LIBRARY</span>
+          <h1>E-Book Library</h1>
+          <p>Add your own books and resources.</p>
+        </div>
+      </div>
+
+      <div class="add-resource panel">
+
+        <input id="bookName" placeholder="Book or resource name">
+        <input id="bookLink" placeholder="Link (optional)">
+
+        <button class="primary-btn" onclick="addBook()">
+          Add Resource
+        </button>
+
+      </div>
+
+      <div id="booksList" class="book-grid"></div>
+
+      <div id="booksEmpty" class="empty-state">
+        <div class="empty-icon">▤</div>
+        <h3>Your library is empty</h3>
+        <p>Add the books or resources you use for studying.</p>
+      </div>
+
+    </section>
+
+
+    <!-- ================= QUIZ ================= -->
+    <section id="quiz" class="page">
+
+      <div class="page-intro">
+        <div>
+          <span class="small-label">PRACTICE</span>
+          <h1>Quick Quiz</h1>
+          <p>Create your own practice questions.</p>
+        </div>
+
+        <button class="primary-btn" onclick="openQuizModal()">
+          + Add Question
+        </button>
+      </div>
+
+      <div id="quizList"></div>
+
+      <div id="quizEmpty" class="empty-state">
+        <div class="empty-icon">✓</div>
+        <h3>No questions yet</h3>
+        <p>Add your own questions to create a personal quiz bank.</p>
+      </div>
+
+    </section>
+
+
+    <!-- ================= UNIVERSE ================= -->
+    <section id="universe" class="page">
+
+      <div class="page-intro">
+        <div>
+          <span class="small-label">KNOWLEDGE MAP</span>
+          <h1>Knowledge Universe</h1>
+          <p>Your subjects and lessons become your learning universe.</p>
+        </div>
+      </div>
+
+      <div id="universeMap" class="universe-map"></div>
+
+      <div id="universeEmpty" class="empty-state">
+        <div class="empty-icon">◎</div>
+        <h3>Your universe is empty</h3>
+        <p>Add subjects and lessons to create your knowledge map.</p>
+      </div>
+
+    </section>
+
+
+    <!-- ================= CUSTOMIZE ================= -->
+    <section id="customize" class="page">
+
+      <div class="page-intro">
+        <div>
+          <span class="small-label">INTERFACE</span>
+          <h1>Customize</h1>
+          <p>Make StudyFlow yours.</p>
+        </div>
+      </div>
+
+      <div class="settings-grid">
+
+        <div class="panel">
+
+          <h3>Appearance</h3>
+
+          <label class="setting-row">
+            <span>Dark Mode</span>
+            <input id="darkMode" type="checkbox" onchange="toggleDarkMode()">
+          </label>
+
+          <label class="setting-row">
+            <span>Compact Interface</span>
+            <input id="compactMode" type="checkbox" onchange="toggleCompact()">
+          </label>
+
+        </div>
+
+
+        <div class="panel">
+
+          <h3>Accent Color</h3>
+
+          <div class="color-options">
+
+            <button onclick="changeAccent('#6c5ce7')" style="background:#6c5ce7"></button>
+            <button onclick="changeAccent('#2563eb')" style="background:#2563eb"></button>
+            <button onclick="changeAccent('#059669')" style="background:#059669"></button>
+            <button onclick="changeAccent('#db2777')" style="background:#db2777"></button>
+            <button onclick="changeAccent('#ea580c')" style="background:#ea580c"></button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+</div>
+
+
+<!-- ================= SUBJECT MODAL ================= -->
+<div id="subjectModal" class="modal hidden">
+
+  <div class="modal-card">
+
+    <button class="close-btn" onclick="closeSubjectModal()">×</button>
+
+    <h2>Add Subject</h2>
+    <p class="muted">Only the subjects you enter will appear.</p>
+
+    <input id="newSubjectName" placeholder="Subject name">
+
+    <button class="primary-btn" onclick="addSubject()">
+      Add Subject
+    </button>
+
+  </div>
+
+</div>
+
+
+<!-- ================= QUIZ MODAL ================= -->
+<div id="quizModal" class="modal hidden">
+
+  <div class="modal-card">
+
+    <button class="close-btn" onclick="closeQuizModal()">×</button>
+
+    <h2>Add Question</h2>
+
+    <input id="questionText" placeholder="Question">
+
+    <input id="answerText" placeholder="Answer">
+
+    <button class="primary-btn" onclick="addQuizQuestion()">
+      Add Question
+    </button>
+
+  </div>
+
+</div>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
